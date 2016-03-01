@@ -16,9 +16,13 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.widget.TextView;
 
 import com.jerieshandal.tribies.settings.GeneralSettingsFragment;
 import com.jerieshandal.tribies.settings.UserSettingsFragment;
+import com.jerieshandal.tribies.utility.StringUtils;
+
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,6 +32,7 @@ public class SettingsActivity extends AppCompatActivity {
     private Toolbar toolbar;
     private TabLayout tabLayout;
     private ViewPager viewPager;
+    private TextView mSettingsToolbarTitle;
     private final static int[] tabIcons = {
             R.drawable.user_settings,
             R.drawable.general_settings
@@ -38,16 +43,17 @@ public class SettingsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
 
+        mSettingsToolbarTitle  = (TextView) findViewById(R.id.settings_toolbar_title);
+        mSettingsToolbarTitle.setTypeface(StringUtils.retrieveTitleFont(getAssets()));
+        mSettingsToolbarTitle.setText(getString(R.string.title_activity_user_settings));
+
         toolbar = (Toolbar) findViewById(R.id.settings_toolbar);
         setSupportActionBar(toolbar);
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setDisplayShowTitleEnabled(false);
         }
         setupTabs();
-    }
-
-    public void setActionBarTitle(String title) {
-        toolbar.setTitle(title);
     }
 
     private void setupTabs() {
@@ -62,11 +68,10 @@ public class SettingsActivity extends AppCompatActivity {
                 viewPager.setCurrentItem(tab.getPosition());
                switch(tab.getPosition()){
                    case 0:
-                       toolbar.setTitle(getString(R.string.title_activity_user_settings));
-
+                       mSettingsToolbarTitle.setText(getString(R.string.title_activity_user_settings));
                        break;
                    case 1:
-                       toolbar.setTitle(getString(R.string.title_activity_general_settings));
+                       mSettingsToolbarTitle.setText(getString(R.string.title_activity_general_settings));
                        break;
                }
             }

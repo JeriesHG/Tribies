@@ -6,7 +6,7 @@
  *
  */
 
-package com.jerieshandal.tribies.account;
+package com.jerieshandal.tribies.user;
 
 import android.text.TextUtils;
 
@@ -23,15 +23,15 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * AccountDAO
+ * UserDAO
  * Created by Jeries Handal on 2/2/2016.
  * Version 1.0.0
  */
-public class AccountDAO extends GenericDAO {
+public class UserDAO extends GenericDAO {
 
     private Map<String, String> testCredentials;
 
-    public AccountDAO() {
+    public UserDAO() {
         testCredentials = new HashMap<>();
         testCredentials.put("12345", "123");
         testCredentials.put("54321", "123");
@@ -39,12 +39,12 @@ public class AccountDAO extends GenericDAO {
         testCredentials.put("tribies@tribies.com", "123");
     }
 
-    public AccountDAO(Connection connection) {
+    public UserDAO(Connection connection) {
         super(connection);
     }
 
-    public AccountDTO checkLoginCredentials(String email, String phone, String password) throws SQLException {
-        AccountDTO e = null;
+    public UserDTO checkLoginCredentials(String email, String phone, String password) throws SQLException {
+        UserDTO e = null;
 
         PreparedStatement ps = null;
         ResultSet rs = null;
@@ -54,7 +54,7 @@ public class AccountDAO extends GenericDAO {
             email = (TextUtils.isEmpty(email)) ? "" : email;
             phone = (TextUtils.isEmpty(phone)) ? "" : phone;
 
-            ps = connection.prepareStatement(ACCOUNT.CheckLoginCredentials.sql());
+            ps = connection.prepareStatement(USER.CheckLoginCredentials.sql());
             ps.setString(i++, email.toUpperCase());
             ps.setString(i++, phone.toUpperCase());
             ps.setString(i++, password);
@@ -62,7 +62,7 @@ public class AccountDAO extends GenericDAO {
             rs = ps.executeQuery();
 
             if (rs.next()) {
-                hydrateAccount(e = new AccountDTO(), rs);
+                hydrateAccount(e = new UserDTO(), rs);
             }
         } finally {
             close(rs, ps);
@@ -70,8 +70,8 @@ public class AccountDAO extends GenericDAO {
         return e;
     }
 
-    public AccountDTO registerAccount(String name, String email, String phone, String password) throws SQLException {
-        AccountDTO e = null;
+    public UserDTO registerAccount(String name, String email, String phone, String password) throws SQLException {
+        UserDTO e = null;
 
         PreparedStatement ps = null;
         ResultSet rs;
@@ -79,7 +79,7 @@ public class AccountDAO extends GenericDAO {
         try {
             int i = 1;
 
-            ps = connection.prepareStatement(ACCOUNT.RegisterAccount.sql());
+            ps = connection.prepareStatement(USER.RegisterAccount.sql());
             ps.setString(i++, name);
             ps.setString(i++, email);
             ps.setString(i++, phone);
@@ -89,7 +89,7 @@ public class AccountDAO extends GenericDAO {
             rs = ps.executeQuery();
 
             if (rs.next()) {
-                hydrateAccount(e = new AccountDTO(), rs);
+                hydrateAccount(e = new UserDTO(), rs);
             }
         } finally {
             close(ps);
@@ -98,8 +98,8 @@ public class AccountDAO extends GenericDAO {
         return e;
     }
 
-    public AccountDTO registerMockAccount(String name, String email, String phone, String password) {
-        AccountDTO e = new AccountDTO();
+    public UserDTO registerMockAccount(String name, String email, String phone, String password) {
+        UserDTO e = new UserDTO();
         e.setFullName(name);
         e.setEmail(email);
         e.setPhone(phone);
@@ -110,12 +110,12 @@ public class AccountDAO extends GenericDAO {
         return e;
     }
 
-    public AccountDTO checkMockAccount(String loginCredential, String password) {
-        AccountDTO e = null;
+    public UserDTO checkMockAccount(String loginCredential, String password) {
+        UserDTO e = null;
 
         if(testCredentials.containsKey(loginCredential)){
             if(testCredentials.get(loginCredential).equals(password)){
-                 e = new AccountDTO();
+                 e = new UserDTO();
                 e.setFullName("TEST");
                 e.setEmail((loginCredential.contains("@") ? loginCredential : "test@test.com"));
                 e.setPhone((loginCredential.contains("@")) ? "12345" : loginCredential);
@@ -129,7 +129,7 @@ public class AccountDAO extends GenericDAO {
         return e;
     }
 
-    private void hydrateAccount(AccountDTO e, ResultSet rs) throws SQLException {
+    private void hydrateAccount(UserDTO e, ResultSet rs) throws SQLException {
         e.setAccId(rs.getInt("AccId"));
         e.setFullName(rs.getString("FullName"));
         e.setEmail(rs.getString("Email"));

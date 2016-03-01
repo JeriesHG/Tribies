@@ -8,11 +8,13 @@
 package com.jerieshandal.tribies.business;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 import android.view.View;
 import android.widget.ListView;
 
+import com.jerieshandal.tribies.BusinessDiscountsActivity;
 import com.jerieshandal.tribies.R;
 import com.jerieshandal.tribies.utility.Callbacks;
 
@@ -40,6 +42,7 @@ public class BusinessListFragment extends ListFragment {
     private static Callbacks sDummyCallbacks = new Callbacks() {
         @Override
         public void onItemSelected(String id) {
+
         }
     };
     /**
@@ -95,7 +98,12 @@ public class BusinessListFragment extends ListFragment {
     public void onListItemClick(ListView l, View v, int position, long id) {
         super.onListItemClick(l, v, position, id);
         //Notify the active callback interface that the item has been selected
-//        mCallbacks.onItemSelected(BusinessContent.Items.get(postiion).getBusId());
+        BusinessDTO e = (BusinessDTO) l.getAdapter().getItem(position);
+       // mCallbacks.onItemSelected(e.getBusId() + "");
+        Intent intent = new Intent(getContext(),BusinessDiscountsActivity.class);
+        intent.putExtra(BusinessDiscountsActivity.D_LIST_ACT_ID, e);
+        startActivity(intent);
+
     }
 
     @Override
@@ -121,21 +129,28 @@ public class BusinessListFragment extends ListFragment {
         }
     }
 
-    private List<BusinessDTO> mockList(){
+    private List<BusinessDTO> mockList() {
         List<BusinessDTO> c = new ArrayList<>();
+
         BusinessDTO e1 = new BusinessDTO();
         e1.setBusId(1);
         e1.setName("Negocio 1");
         e1.setLogo("citizen_logo_asibp2.jpg");
+        e1.setPhone("+50425520501");
+        e1.setEmail("negocio1@hotmail.com");
+        e1.setAddress("3 calle, San Pedro Sula 00504, Honduras");
         c.add(e1);
 
-       // BusinessDTO e2 = new BusinessDTO();
-       // e2.setBusId(2);
-       // e2.setName("Negocio 2");
-        //e2.setLogo("zara_logo_mz22cs.png");
-      //  c.add(e2);
+        BusinessDTO e2 = new BusinessDTO();
+        e2.setBusId(2);
+        e2.setName("Negocio 2");
+        e2.setLogo("zara_logo_mz22cs.png");
+        e2.setPhone("+504225201051");
+        e2.setEmail("negocio2@hotmail.com");
+        e2.setAddress("16 calle S.O. | San Pedro Sula, Col., San Pedro Sula 21104, Honduras");
+        c.add(e2);
 
-         return c;
+        return c;
     }
 
 }

@@ -6,27 +6,27 @@
  *
  */
 
-package com.jerieshandal.tribies.account;
+package com.jerieshandal.tribies.user;
 
 /**
- * ACCOUNT
+ * USER
  * Created by Jeries Handal on 2/2/2016.
  * Version 1.0.0
  */
-public enum ACCOUNT {
+public enum USER {
 
     /**
      * Check account credentials by Email or Phone
      */
-    CheckLoginCredentials("SELECT * FROM Account WHERE UPPER(Email = ? OR Phone = ?) AND Password = ?"),
+    CheckLoginCredentials("SELECT * FROM User WHERE UPPER(Email = ? OR Phone = ?) AND Password = ?"),
     /**
      * Registers New Account
      */
-    RegisterAccount("INSERT INTO Account SET FullName = ?, Password = ?, Email = ?, Phone = ?, Token = ?");
+    RegisterAccount("INSERT INTO User SET FullName = ?, Password = ?, Email = ?, Phone = ?, Token = ?");
 
     private final String sql;
 
-    ACCOUNT(String sql){
+    USER(String sql){
         this.sql = sql;
     }
 

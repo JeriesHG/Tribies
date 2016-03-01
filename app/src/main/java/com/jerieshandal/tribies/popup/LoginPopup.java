@@ -31,9 +31,8 @@ import android.widget.EditText;
 import com.google.gson.Gson;
 import com.jerieshandal.tribies.MainActivity;
 import com.jerieshandal.tribies.R;
-import com.jerieshandal.tribies.account.AccountDAO;
-import com.jerieshandal.tribies.account.AccountDTO;
-import com.jerieshandal.tribies.security.TokenGenerator;
+import com.jerieshandal.tribies.user.UserDAO;
+import com.jerieshandal.tribies.user.UserDTO;
 import com.jerieshandal.tribies.utility.StringUtils;
 
 /**
@@ -214,8 +213,8 @@ public class LoginPopup extends Activity implements LoaderManager.LoaderCallback
             }
 //            try {
 //                try (Connection connection = ConnectionFactory.getTribies()) {
-            AccountDAO dao = new AccountDAO();
-            AccountDTO e = dao.checkMockAccount(mLoginCredential, mPasswordView);
+            UserDAO dao = new UserDAO();
+            UserDTO e = dao.checkMockAccount(mLoginCredential, mPasswordView);
             try {
                 Thread.sleep(2000);
             } catch (InterruptedException e1) {

@@ -35,6 +35,7 @@ import com.jerieshandal.tribies.enums.Names;
 import com.jerieshandal.tribies.popup.LoginPopup;
 import com.jerieshandal.tribies.security.TokenGenerator;
 import com.jerieshandal.tribies.utility.Callbacks;
+import com.jerieshandal.tribies.utility.StringUtils;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -96,8 +97,7 @@ public class MainActivity extends AppCompatActivity implements Callbacks {
         }
 
         mTitle = (TextView) findViewById(R.id.main_toolbar_title);
-        Typeface customFont = Typeface.createFromAsset(getAssets(), Fonts.TITLE_FONT.getFont());
-        mTitle.setTypeface(customFont);
+        mTitle.setTypeface(StringUtils.retrieveTitleFont(getAssets()));
 
         mDrawerLayout.setDrawerListener(mDrawerToggle);
         mDrawerToggle.syncState();

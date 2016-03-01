@@ -21,6 +21,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
+import com.google.gson.Gson;
 import com.jerieshandal.tribies.R;
 import com.jerieshandal.tribies.utility.ImageUtils;
 
@@ -64,14 +65,16 @@ public class BusinessAdapter extends ArrayAdapter<BusinessDTO> implements Filter
 
         //TODO: Bind DTO to the layout
         BusinessDTO e = getItem(position);
+
         //ImageView logo = (ImageView) parent.findViewById(R.id.businessLogo);
         //logo.setImageBitmap(ImageUtils.base64ToBitmap(e.getLogo()));
 
-       // TextView name = (TextView) parent.findViewById(R.id.businessName);
-//        name.setText(e.getName());
+        TextView name = (TextView) businessView.findViewById(R.id.business_name);
+        name.setText(e.getName());
 
-       // ToggleButton toggleButton = (ToggleButton) parent.findViewById(R.id.likeButton);
-      //  toggleButton.setChecked(true);
+        ToggleButton toggleButton = (ToggleButton) businessView.findViewById(R.id.like_button);
+        toggleButton.setChecked(true);
+
         return businessView;
     }
 

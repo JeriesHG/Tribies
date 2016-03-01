@@ -20,9 +20,11 @@
     <string name="error_incorrect_password">Esta contraseña esta incorrecta</string>
     <string name="error_password_mismatch">La contraseña no concuerda con la confirmacion de la contraseña</string>
     <string name="error_field_required">Este es un campo requerido</string>
+    <string name="field_not_entered">N/A</string>
     <string name="permission_rationale">"Contacts permissions are needed for providing email
         completions."
     </string>
     <string name="title_activity_user_settings">Configuracion Personal</string>
     <string name="title_activity_general_settings">Configuracion General</string>
+    <string name="title_activity_business_information">Informacion de </string>
 </resources>

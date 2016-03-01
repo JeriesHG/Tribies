@@ -15,10 +15,11 @@
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:layout_marginStart="10sp"
-        android:layout_marginLeft="10sp" />
+        android:layout_marginLeft="10sp"
+        android:src="@drawable/img_not_available_esp"/>
 
     <TextView
-        android:id="@+id/businessName"
+        android:id="@+id/business_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
@@ -30,7 +31,7 @@
         android:textSize="24sp" />
 
     <ToggleButton
-        android:id="@+id/likeButton"
+        android:id="@+id/like_button"
         style="?android:attr/borderlessButtonStyle"
         android:layout_width="42dp"
         android:layout_height="42dp"
@@ -40,6 +41,7 @@
         android:layout_marginEnd="33dp"
         android:layout_marginRight="33dp"
         android:background="@drawable/ic_toggle_bg"
+        android:focusable="false"
         android:textOff=""
         android:textOn="" />
 

@@ -13,7 +13,6 @@ import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.LoaderManager;
-import android.content.Context;
 import android.content.Intent;
 import android.content.Loader;
 import android.content.SharedPreferences;
@@ -30,11 +29,10 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.google.gson.Gson;
-import com.jerieshandal.tribies.LoginActivity;
 import com.jerieshandal.tribies.MainActivity;
 import com.jerieshandal.tribies.R;
-import com.jerieshandal.tribies.account.AccountDAO;
-import com.jerieshandal.tribies.account.AccountDTO;
+import com.jerieshandal.tribies.user.UserDAO;
+import com.jerieshandal.tribies.user.UserDTO;
 import com.jerieshandal.tribies.utility.StringUtils;
 
 /**
@@ -259,8 +257,8 @@ public class RegisterPopup extends Activity implements LoaderManager.LoaderCallb
             }
 //            try {
 //                try (Connection connection = ConnectionFactory.getTribies()) {
-            AccountDAO dao = new AccountDAO();
-            AccountDTO e = dao.registerMockAccount(mName, mEmail, mPhone, mPassword);
+            UserDAO dao = new UserDAO();
+            UserDTO e = dao.registerMockAccount(mName, mEmail, mPhone, mPassword);
             try {
                 Thread.sleep(2000);
             } catch (InterruptedException e1) {
