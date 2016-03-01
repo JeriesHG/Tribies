@@ -8,7 +8,11 @@
 
 package com.jerieshandal.tribies.utility;
 
+import android.content.res.AssetManager;
+import android.graphics.Typeface;
 import android.text.TextUtils;
+
+import com.jerieshandal.tribies.enums.Fonts;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -34,4 +38,7 @@ public class StringUtils {
         }
     }
 
+    public static Typeface retrieveTitleFont(AssetManager assets){
+        return Typeface.createFromAsset(assets, Fonts.TITLE_FONT.getFont());
+    }
 }

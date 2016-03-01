@@ -6,17 +6,17 @@
  *
  */
 
-package com.jerieshandal.tribies.account;
+package com.jerieshandal.tribies.user;
 
 import java.io.Serializable;
 import java.util.Date;
 
 /**
- * AccountDTO
+ * UserDTO
  * Created by Jeries Handal on 2/2/2016.
  * Version 1.0.0
  */
-public class AccountDTO implements Serializable{
+public class UserDTO implements Serializable{
 
     private int accId;
     private String fullName;
