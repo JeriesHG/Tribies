@@ -34,16 +34,18 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="fill_parent"
+        android:background="@color/lightBackground"
+        android:orientation="vertical"
+        android:padding="10dp"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <LinearLayout
-            android:id="@+id/linearLayout"
+        <RelativeLayout
+            android:id="@+id/discount_slider_container"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:layout_height="wrap_content">
 
             <com.daimajia.slider.library.SliderLayout
                 android:id="@+id/discount_slider"
@@ -51,6 +53,93 @@
                 android:layout_height="200dp">
 
             </com.daimajia.slider.library.SliderLayout>
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:id="@+id/discount_content"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp">
+
+                <ToggleButton
+                    android:id="@+id/thumbs_up_button"
+                    style="?android:attr/borderlessButtonStyle"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:background="@drawable/ic_thumbs_up_toggle"
+                    android:focusable="false"
+                    android:textOff=""
+                    android:textOn="" />
+
+                <TextView
+                    android:id="@+id/discount_thumbs_up_counter"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="false"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
+                    android:layout_toEndOf="@+id/thumbs_up_button"
+                    android:layout_toRightOf="@+id/thumbs_up_button"
+                    android:text="123"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:textSize="16sp"
+                    android:layout_alignParentRight="false"
+                    android:layout_marginTop="5dp" />
+
+                <TextView
+                    android:id="@+id/discount_thumbs_up_count2er"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
+                    android:layout_toEndOf="@+id/thumbs_up_button"
+                    android:layout_toRightOf="@+id/thumbs_up_button"
+                    android:text="Valido: 2/2/2016 hasta 3/3/2016"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:textSize="12sp"
+                    android:layout_alignParentRight="true"
+                    android:gravity="bottom|right"
+                    android:layout_alignParentBottom="false"
+                    android:layout_marginTop="8dp" />
+
+
+
+            </RelativeLayout>
+
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="1dp"
+                android:background="@color/textColor1"
+                android:layout_marginBottom="5dp"
+                android:layout_marginTop="5dp"/>
+
+            <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:fillViewport="true">
+
+
+                <TextView
+                    android:id="@+id/discount_description"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
+                    android:layout_marginTop="5dp"
+                    android:text="@string/lorem"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:textSize="14sp" />
+            </ScrollView>
+
+
         </LinearLayout>
-    </RelativeLayout>
+
+
+    </LinearLayout>
 </android.support.design.widget.CoordinatorLayout>

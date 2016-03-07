@@ -27,4 +27,12 @@
     <string name="title_activity_user_settings">Configuracion Personal</string>
     <string name="title_activity_general_settings">Configuracion General</string>
     <string name="title_activity_business_information">Informacion de </string>
+
+    <string name="lorem">
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras dui ante, volutpat non commodo non, egestas ut risus. Aenean ultrices massa in arcu maximus, sit amet efficitur dolor placerat. Nullam facilisis quis enim vitae dapibus. Suspendisse potenti. Sed sit amet scelerisque neque. Morbi congue facilisis congue. Nulla sed nibh at metus efficitur mollis. Proin rhoncus aliquam accumsan. Cras maximus odio leo, gravida ultricies erat posuere in. Vestibulum pellentesque diam in lacinia ultrices.
+
+Fusce varius ultrices nibh ac lacinia. Integer posuere ligula sit amet orci commodo tempus. Vestibulum fermentum dolor a eros pulvinar, ut pretium leo dictum. Duis velit ante, porta ac purus ut, consectetur hendrerit orci. Curabitur aliquam ac libero egestas faucibus. Vestibulum imperdiet vestibulum nisi non auctor. Sed pharetra nibh sit amet ultricies sagittis. Donec ut dignissim ligula. Cras tempus augue vitae ex lacinia, vitae rutrum sem facilisis. Nulla gravida risus eget magna consequat, nec sodales est aliquet. Aenean faucibus libero ullamcorper, blandit eros et, egestas sem. Nunc vulputate massa vel ligula iaculis faucibus. Donec congue aliquam placerat. Vestibulum sit amet facilisis libero, sed viverra dui. Mauris eu suscipit ipsum, non lobortis velit.
+
+Phasellus porta ac orci imperdiet ultrices. Suspendisse feugiat accumsan tristique. Proin non diam lobortis, pretium lacus id, imperdiet erat. Nulla consectetur sem eget risus porta bibendum. Etiam nec rutrum est. Integer nulla lacus, sagittis vitae nibh vel, condimentum finibus arcu. Sed nisl ligula, rhoncus quis purus quis, porttitor commodo arcu. Ut euismod, nulla sollicitudin facilisis pretium, ligula elit efficitur sapien, ac dignissim lectus ipsum vitae metus. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Phasellus non ultricies nisl.
+    </string>
 </resources>

@@ -21,6 +21,7 @@ public class DiscountDTO  implements Serializable {
     private int discId;
     private String title;
     private String description;
+    private Date start;
     private Date expiry;
     private Date created;
 
@@ -46,6 +47,14 @@ public class DiscountDTO  implements Serializable {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public Date getStart() {
+        return start;
+    }
+
+    public void setStart(Date start) {
+        this.start = start;
     }
 
     public Date getExpiry() {

@@ -11,6 +11,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.sql.Connection;
+import java.util.Date;
+
 
 /**
  * GenericDAO
@@ -25,6 +27,10 @@ public class GenericDAO {
     public GenericDAO(){}
     public GenericDAO(Connection connection){
         this.connection = connection;
+    }
+
+    protected Date toJavaDate(java.sql.Date date){
+        return new Date(date.getTime());
     }
 
     protected void close(AutoCloseable... c) {

@@ -9,7 +9,6 @@ package com.jerieshandal.tribies;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -29,18 +28,26 @@ import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.jerieshandal.tribies.category.CategoryDAO;
 import com.jerieshandal.tribies.category.CategoryDTO;
-import com.jerieshandal.tribies.enums.Fonts;
+import com.jerieshandal.tribies.database.DriverFactory;
 import com.jerieshandal.tribies.enums.Names;
 import com.jerieshandal.tribies.popup.LoginPopup;
-import com.jerieshandal.tribies.security.TokenGenerator;
 import com.jerieshandal.tribies.utility.Callbacks;
 import com.jerieshandal.tribies.utility.StringUtils;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.lang.reflect.Type;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -72,7 +79,7 @@ public class MainActivity extends AppCompatActivity implements Callbacks {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        String token = PreferenceManager.getDefaultSharedPreferences(this).getString(LoginPopup.LOGGED_IN_ID,"");
+        String token = PreferenceManager.getDefaultSharedPreferences(this).getString(LoginPopup.LOGGED_IN_ID, "");
         if (TextUtils.isEmpty(token)) {
             startActivity(new Intent(MainActivity.this, LoginActivity.class));
         }
@@ -157,17 +164,15 @@ public class MainActivity extends AppCompatActivity implements Callbacks {
             List<CategoryDTO> c = gson.fromJson(preferences.getString(Names.CATEGORY_LIST.getName(), ""), listType);
 
             if (c == null) {
-                //TODO: Read categories from database and store in cache
                 c = new ArrayList<>();
-                CategoryDTO test = new CategoryDTO();
-                test.setCatId(1);
-                test.setName("Test 1");
-                c.add(test);
-                CategoryDTO test1 = new CategoryDTO();
-                test1.setCatId(2);
-                test1.setName("Test 2");
-                c.add(test1);
-                // preferences.edit().putString(Names.CATEGORY_LIST.getName(), gson.toJson(c, listType)).apply();
+                try {
+                    Connection connection = DriverFactory.getTribiesConnection();
+                    CategoryDAO dao = new CategoryDAO(connection);
+                    c = dao.readCategories();
+                } catch (SQLException | ClassNotFoundException e) {
+                    e.printStackTrace();
+                }
+                preferences.edit().putString(Names.CATEGORY_LIST.getName(), gson.toJson(c, listType)).apply();
             }
 
             return c;
@@ -201,4 +206,48 @@ public class MainActivity extends AppCompatActivity implements Callbacks {
             ((ViewGroup) view).removeAllViews();
         }
     }
+
+//    public String getJSON(String url, int timeout) {
+//        HttpURLConnection c = null;
+//        try {
+//            URL u = new URL(url);
+//            c = (HttpURLConnection) u.openConnection();
+//            c.setRequestMethod("GET");
+//            c.setRequestProperty("Content-length", "0");
+//            c.setUseCaches(false);
+//            c.setAllowUserInteraction(false);
+//            c.setConnectTimeout(timeout);
+//            c.setReadTimeout(timeout);
+//            c.connect();
+//            int status = c.getResponseCode();
+//
+//            switch (status) {
+//                case 200:
+//                case 201:
+//                    BufferedReader br = new BufferedReader(new InputStreamReader(c.getInputStream()));
+//                    StringBuilder sb = new StringBuilder();
+//                    String line;
+//                    while ((line = br.readLine()) != null) {
+//                        sb.append(line + "\n");
+//                    }
+//                    br.close();
+//                    return sb.toString();
+//            }
+//
+//        } catch (MalformedURLException ex) {
+//            LOGGER.error(ex.getMessage(), ex);
+//        } catch (IOException ex) {
+//            LOGGER.error(ex.getMessage(), ex);
+//        } finally {
+//            if (c != null) {
+//                try {
+//                    c.disconnect();
+//                } catch (Exception ex) {
+//                    LOGGER.error(ex.getMessage(), ex);
+//                }
+//            }
+//        }
+//
+//        return null;
+//    }
 }
