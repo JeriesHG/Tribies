@@ -41,10 +41,9 @@ public class BusinessAdapter extends ArrayAdapter<BusinessDTO> implements Filter
     private BusinessAdapter adapter;
     private int resource;
 
-    public BusinessAdapter(Context context, int resource, List<BusinessDTO> objects) {
-        super(context, resource, objects);
+    public BusinessAdapter(Context context, int resource) {
+        super(context, resource);
         this.business = new ArrayList<>();
-        this.business.addAll(objects);
         this.resource = resource;
         this.adapter = this;
     }
@@ -66,8 +65,8 @@ public class BusinessAdapter extends ArrayAdapter<BusinessDTO> implements Filter
         //TODO: Bind DTO to the layout
         BusinessDTO e = getItem(position);
 
-        //ImageView logo = (ImageView) parent.findViewById(R.id.businessLogo);
-        //logo.setImageBitmap(ImageUtils.base64ToBitmap(e.getLogo()));
+//        ImageView logo = (ImageView) parent.findViewById(R.id.businessLogo);
+//        logo.setImageBitmap(ImageUtils.base64ToBitmap(e.getLogo()));
 
         TextView name = (TextView) businessView.findViewById(R.id.business_name);
         name.setText(e.getName());
@@ -113,5 +112,11 @@ public class BusinessAdapter extends ArrayAdapter<BusinessDTO> implements Filter
                 }
             }
         };
+    }
+
+    public void updateList(List<BusinessDTO> c){
+        adapter.clear();
+        adapter.addAll(c);
+        notifyDataSetChanged();
     }
 }

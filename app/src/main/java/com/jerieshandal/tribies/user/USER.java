@@ -16,6 +16,10 @@ package com.jerieshandal.tribies.user;
 public enum USER {
 
     /**
+     * Loads User
+     */
+    LoadUser("SELECT * FROM User WHERE UPPER(UserId = ?)"),
+    /**
      * Check account credentials by Email or Phone
      */
     CheckLoginCredentials("SELECT * FROM User WHERE UPPER(Email = ? OR Phone = ?) AND Password = ?"),

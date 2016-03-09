@@ -18,7 +18,7 @@ import java.util.Date;
  */
 public class UserDTO implements Serializable{
 
-    private int accId;
+    private int usrId;
     private String fullName;
     private String password;
     private String email;
@@ -26,12 +26,12 @@ public class UserDTO implements Serializable{
     private String token;
     private Date created;
 
-    public int getAccId() {
-        return accId;
+    public int getUsrId() {
+        return usrId;
     }
 
-    public void setAccId(int accId) {
-        this.accId = accId;
+    public void setUsrId(int usrId) {
+        this.usrId = usrId;
     }
 
     public String getFullName() {

@@ -25,27 +25,34 @@ public enum BUSINESS {
     /**
      * Reads All Business By Name
      */
-    ReadBusinessByName("SELECT  B.BusId,B.Name, B.Email, B.Phone, B.Address, B.Logo, B.Created" +
+    ReadBusinessByName("SELECT  B.BusId,B.Name, B.Email, B.Phone, B.Address, B.Logo, B.Created " +
             "FROM Business as B " +
-            "ORDER BY B.B.Name;"),
+            "INNER JOIN BusinessByCategory as BC " +
+            "ON BC.CatId = ? AND B.BusId = BC.BusId " +
+            "WHERE  NOT EXISTS (SELECT 1  FROM   FavoriteBusiness as FB  WHERE  B.BusId = FB.BusId AND FB.UserId = ?) " +
+            "ORDER BY B.Name;"),
     /**
      * Reads all business liked by user
      */
-    ReadFavoriteBusiness("SELECT  B.BusId, B.Name, B.Email, B.Phone, B.Address, B.Logo, B.Created " +
+    ReadFavoriteBusiness("SELECT  B.BusId,B.Name, B.Email, B.Phone, B.Address, B.Logo, B.Created " +
             "FROM Business as B " +
-            "INNER JOIN FavoriteBusiness as FB " +
-            "ON B.BusId = FB.BusId " +
-            "AND FB.UserId = ?;"),
+            "INNER JOIN BusinessByCategory as BC " +
+            "ON BC.CatId = ? AND B.BusId = BC.BusId " +
+            "WHERE EXISTS (SELECT 1  FROM   FavoriteBusiness as FB  WHERE  B.BusId = FB.BusId AND FB.UserId = ?) " +
+            "ORDER BY B.Name;"),
     /**
-     * Read trending business
+     * Read most recent business
      */
-    ReadTrendingBusiness("SELECT  B.BusId, B.Name, B.Email, B.Phone, B.Address, B.Logo, B.Created " +
+    ReadMostRecentBusiness("SELECT  B.BusId,B.Name, B.Email, B.Phone, B.Address, B.Logo, B.Created " +
             "FROM Business as B " +
+            "INNER JOIN BusinessByCategory as BC " +
+            "ON BC.CatId = ? AND B.BusId = BC.BusId " +
+            "WHERE  NOT EXISTS (SELECT 1  FROM   FavoriteBusiness as FB  WHERE  B.BusId = FB.BusId AND FB.UserId = ?) " +
             "ORDER BY B.Created;");
 
     private final String sql;
 
-    private BUSINESS(String sql) {
+    BUSINESS(String sql) {
         this.sql = sql;
     }
 

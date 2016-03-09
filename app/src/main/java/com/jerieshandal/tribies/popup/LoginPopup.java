@@ -31,21 +31,25 @@ import android.widget.EditText;
 import com.google.gson.Gson;
 import com.jerieshandal.tribies.MainActivity;
 import com.jerieshandal.tribies.R;
+import com.jerieshandal.tribies.database.DriverFactory;
 import com.jerieshandal.tribies.user.UserDAO;
 import com.jerieshandal.tribies.user.UserDTO;
 import com.jerieshandal.tribies.utility.StringUtils;
+
+import java.sql.Connection;
+import java.sql.SQLException;
 
 /**
  * LoginPopup
  * Created by Jeries Handal on 2/8/2016.
  * Version 1.0.0
  */
-public class LoginPopup extends Activity implements LoaderManager.LoaderCallbacks<Cursor>{
+public class LoginPopup extends Activity implements LoaderManager.LoaderCallbacks<Cursor> {
 
-    public static final String LOGGED_IN_ID = "logCredTken";
+    public static final String LOGGED_IN_ID = "log_id";
 
     private LoginTask mAuthTask;
-    
+
     //UI References
     private View mProgressView;
     private View mLoginFormView;
@@ -73,7 +77,7 @@ public class LoginPopup extends Activity implements LoaderManager.LoaderCallback
         });
     }
 
-    private void attemptLogin(){
+    private void attemptLogin() {
         if (mAuthTask != null) {
             return;
         }
@@ -97,17 +101,17 @@ public class LoginPopup extends Activity implements LoaderManager.LoaderCallback
             cancel = true;
         }
 
-        if(TextUtils.isEmpty(loginCredentials)){
+        if (TextUtils.isEmpty(loginCredentials)) {
             focusView = mLoginCredentials;
             mLoginCredentials.setError(getString(R.string.error_field_required));
             cancel = true;
-        }else if(loginCredentials.contains("@")){ //if its an email
-            if(!StringUtils.isEmailFormatValid(loginCredentials)){
+        } else if (loginCredentials.contains("@")) { //if its an email
+            if (!StringUtils.isEmailFormatValid(loginCredentials)) {
                 focusView = mLoginCredentials;
                 mLoginCredentials.setError(getString(R.string.error_login_credential));
                 cancel = true;
             }
-        }else if(!loginCredentials.matches("\\d+")){//phone
+        } else if (!loginCredentials.matches("\\d+")) {//phone
             focusView = mLoginCredentials;
             mLoginCredentials.setError(getString(R.string.error_login_credential));
             cancel = true;
@@ -196,7 +200,7 @@ public class LoginPopup extends Activity implements LoaderManager.LoaderCallback
         private SharedPreferences mPreferences;
         private Activity mActivity;
 
-        LoginTask(String userCredential,  String password, SharedPreferences preferences, Activity activity) {
+        LoginTask(String userCredential, String password, SharedPreferences preferences, Activity activity) {
             mLoginCredential = userCredential;
             mPasswordView = password;
             mPreferences = preferences;
@@ -206,29 +210,20 @@ public class LoginPopup extends Activity implements LoaderManager.LoaderCallback
         @Override
         protected Boolean doInBackground(Void... params) {
             boolean result = false;
+
             try {
-                Thread.sleep(2000);
-            } catch (InterruptedException e1) {
-                e1.printStackTrace();
+                Connection connection = DriverFactory.getTribiesConnection();
+                UserDAO dao = new UserDAO(connection);
+                UserDTO e = dao.checkLoginCredentials(mLoginCredential, mPasswordView);
+
+                if (e != null) {
+                    mPreferences.edit().putInt(LoginPopup.LOGGED_IN_ID, e.getUsrId()).apply();
+                    result = true;
+                }
+            } catch (SQLException | ClassNotFoundException ex) {
+                ex.printStackTrace();
             }
-//            try {
-//                try (Connection connection = ConnectionFactory.getTribies()) {
-            UserDAO dao = new UserDAO();
-            UserDTO e = dao.checkMockAccount(mLoginCredential, mPasswordView);
-            try {
-                Thread.sleep(2000);
-            } catch (InterruptedException e1) {
-                e1.printStackTrace();
-            }
-            if (e != null) {
-                mPreferences.edit().putString("account", new Gson().toJson(e)).apply();//replace this later
-                mPreferences.edit().putString(LoginPopup.LOGGED_IN_ID, e.getToken()).apply();
-                result = true;
-            }
-//                }
-//            } catch (SQLException | ClassNotFoundException ex) {
-//                ex.printStackTrace();
-//            }
+
             return result;
         }
 
@@ -241,7 +236,7 @@ public class LoginPopup extends Activity implements LoaderManager.LoaderCallback
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 mActivity.startActivity(intent);
                 finish();
-            }else{
+            } else {
                 mLoginCredentials.setError(getString(R.string.error_login_credential));
                 mLoginCredentials.requestFocus();
             }

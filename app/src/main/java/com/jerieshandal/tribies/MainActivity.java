@@ -79,8 +79,8 @@ public class MainActivity extends AppCompatActivity implements Callbacks {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        String token = PreferenceManager.getDefaultSharedPreferences(this).getString(LoginPopup.LOGGED_IN_ID, "");
-        if (TextUtils.isEmpty(token)) {
+        int id = PreferenceManager.getDefaultSharedPreferences(this).getInt(LoginPopup.LOGGED_IN_ID, 0);
+        if (id == 0) {
             startActivity(new Intent(MainActivity.this, LoginActivity.class));
         }
         setContentView(R.layout.activity_main);

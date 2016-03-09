@@ -31,9 +31,13 @@ import android.widget.EditText;
 import com.google.gson.Gson;
 import com.jerieshandal.tribies.MainActivity;
 import com.jerieshandal.tribies.R;
+import com.jerieshandal.tribies.database.DriverFactory;
 import com.jerieshandal.tribies.user.UserDAO;
 import com.jerieshandal.tribies.user.UserDTO;
 import com.jerieshandal.tribies.utility.StringUtils;
+
+import java.sql.Connection;
+import java.sql.SQLException;
 
 /**
  * RegisterPopup
@@ -250,29 +254,21 @@ public class RegisterPopup extends Activity implements LoaderManager.LoaderCallb
         @Override
         protected Boolean doInBackground(Void... params) {
             boolean result = false;
+
             try {
-                Thread.sleep(2000);
-            } catch (InterruptedException e1) {
-                e1.printStackTrace();
+                Connection connection = DriverFactory.getTribiesConnection();
+                UserDAO dao = new UserDAO(connection);
+
+                UserDTO e = dao.registerAccount(mName, mEmail, mPhone, mPassword);
+
+                if (e != null) {
+                    mPreferences.edit().putInt(LoginPopup.LOGGED_IN_ID, e.getUsrId()).apply();
+                    result = true;
+                }
+            } catch (SQLException | ClassNotFoundException ex) {
+                ex.printStackTrace();
             }
-//            try {
-//                try (Connection connection = ConnectionFactory.getTribies()) {
-            UserDAO dao = new UserDAO();
-            UserDTO e = dao.registerMockAccount(mName, mEmail, mPhone, mPassword);
-            try {
-                Thread.sleep(2000);
-            } catch (InterruptedException e1) {
-                e1.printStackTrace();
-            }
-            if (e != null) {
-                mPreferences.edit().putString("account", new Gson().toJson(e)).apply();//remove this later
-                mPreferences.edit().putString(LoginPopup.LOGGED_IN_ID, e.getToken()).apply();
-                result = true;
-            }
-//                }
-//            } catch (SQLException | ClassNotFoundException ex) {
-//                ex.printStackTrace();
-//            }
+
             return result;
         }
 

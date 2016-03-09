@@ -20,6 +20,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.jerieshandal.tribies.business.BusinessListFragment;
+import com.jerieshandal.tribies.business.BusinessType;
 
 /**
  * MainTabFragment
@@ -28,7 +29,10 @@ import com.jerieshandal.tribies.business.BusinessListFragment;
  */
 public class MainTabFragment extends Fragment {
 
-    private static final String[] tabNames = {"Mis Tiendas", "Tiendas", "Trending"};
+    private static final String[] tabNames = {BusinessType.MY_STORES.getType(),
+            BusinessType.STORES.getType(),
+            BusinessType.MOST_RECENT.getType()};
+
     public static TabLayout tabLayout;
     public static ViewPager viewPager;
 
@@ -58,12 +62,21 @@ public class MainTabFragment extends Fragment {
 
         @Override
         public Fragment getItem(int position) {
+            BusinessListFragment fragment = new BusinessListFragment();
+
             switch(position){
-                case 0: return new BusinessListFragment();
-                case 1: return new BusinessListFragment();
-                case 2: return new BusinessListFragment();
+                case 0:
+                    fragment.updateList(BusinessType.MY_STORES);
+                    break;
+                case 1:
+                    fragment.updateList(BusinessType.STORES);
+                    break;
+                case 2:
+                    fragment.updateList(BusinessType.MOST_RECENT);
+                    break;
             }
-            return null;
+
+            return fragment;
         }
 
         @Override

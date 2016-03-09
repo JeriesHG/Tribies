@@ -18,9 +18,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * UserDAO
@@ -29,21 +26,11 @@ import java.util.Map;
  */
 public class UserDAO extends GenericDAO {
 
-    private Map<String, String> testCredentials;
-
-    public UserDAO() {
-        testCredentials = new HashMap<>();
-        testCredentials.put("12345", "123");
-        testCredentials.put("54321", "123");
-        testCredentials.put("jhandal@test.com", "123");
-        testCredentials.put("tribies@tribies.com", "123");
-    }
-
     public UserDAO(Connection connection) {
         super(connection);
     }
 
-    public UserDTO checkLoginCredentials(String email, String phone, String password) throws SQLException {
+    public UserDTO loadUser(int userId) throws SQLException {
         UserDTO e = null;
 
         PreparedStatement ps = null;
@@ -51,12 +38,37 @@ public class UserDAO extends GenericDAO {
 
         try {
             int i = 1;
-            email = (TextUtils.isEmpty(email)) ? "" : email;
-            phone = (TextUtils.isEmpty(phone)) ? "" : phone;
+
+            ps = connection.prepareStatement(USER.LoadUser.sql());
+            ps.setInt(i++, userId);
+
+            rs = ps.executeQuery();
+
+            if (rs.next()) {
+                hydrateAccount(e = new UserDTO(), rs);
+            }
+        } finally {
+            close(rs, ps);
+            if (connection != null) {
+                connection.close();
+            }
+        }
+        return e;
+    }
+
+    public UserDTO checkLoginCredentials(String credentials, String password) throws SQLException {
+        UserDTO e = null;
+
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+
+        try {
+            int i = 1;
+            credentials = (TextUtils.isEmpty(credentials)) ? "" : credentials;
 
             ps = connection.prepareStatement(USER.CheckLoginCredentials.sql());
-            ps.setString(i++, email.toUpperCase());
-            ps.setString(i++, phone.toUpperCase());
+            ps.setString(i++, credentials.toUpperCase());
+            ps.setString(i++, credentials.toUpperCase());
             ps.setString(i++, password);
 
             rs = ps.executeQuery();
@@ -66,6 +78,9 @@ public class UserDAO extends GenericDAO {
             }
         } finally {
             close(rs, ps);
+            if (connection != null) {
+                connection.close();
+            }
         }
         return e;
     }
@@ -93,36 +108,8 @@ public class UserDAO extends GenericDAO {
             }
         } finally {
             close(ps);
-        }
-
-        return e;
-    }
-
-    public UserDTO registerMockAccount(String name, String email, String phone, String password) {
-        UserDTO e = new UserDTO();
-        e.setFullName(name);
-        e.setEmail(email);
-        e.setPhone(phone);
-        e.setPassword(password);
-        e.setAccId(1);
-        e.setToken(TokenGenerator.generate());
-        e.setCreated(new Date());
-        return e;
-    }
-
-    public UserDTO checkMockAccount(String loginCredential, String password) {
-        UserDTO e = null;
-
-        if(testCredentials.containsKey(loginCredential)){
-            if(testCredentials.get(loginCredential).equals(password)){
-                 e = new UserDTO();
-                e.setFullName("TEST");
-                e.setEmail((loginCredential.contains("@") ? loginCredential : "test@test.com"));
-                e.setPhone((loginCredential.contains("@")) ? "12345" : loginCredential);
-                e.setAccId(1);
-                e.setCreated(new Date());
-                e.setPassword(password);
-                e.setToken(TokenGenerator.generate());
+            if (connection != null) {
+                connection.close();
             }
         }
 
@@ -130,7 +117,7 @@ public class UserDAO extends GenericDAO {
     }
 
     private void hydrateAccount(UserDTO e, ResultSet rs) throws SQLException {
-        e.setAccId(rs.getInt("AccId"));
+        e.setUsrId(rs.getInt("UserId"));
         e.setFullName(rs.getString("FullName"));
         e.setEmail(rs.getString("Email"));
         e.setPhone(rs.getString("Phone"));

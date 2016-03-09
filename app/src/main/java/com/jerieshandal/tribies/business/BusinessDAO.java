@@ -85,7 +85,7 @@ public class BusinessDAO extends GenericDAO{
         return success;
     }
 
-    public List<BusinessDTO> readFavoriteBusiness(int userId) throws SQLException {
+    public List<BusinessDTO> readFavoriteBusiness(int catId, int userId) throws SQLException {
         List<BusinessDTO> c = new ArrayList<>();
 
         ResultSet rs = null;
@@ -93,6 +93,7 @@ public class BusinessDAO extends GenericDAO{
         try {
             int i = 1;
             ps = connection.prepareStatement(BUSINESS.ReadFavoriteBusiness.Sql());
+            ps.setInt(i++, catId);
             ps.setInt(i++, userId);
             rs = ps.executeQuery();
 
@@ -119,13 +120,16 @@ public class BusinessDAO extends GenericDAO{
         return c;
     }
 
-    public List<BusinessDTO> readBusinessByName() throws SQLException {
+    public List<BusinessDTO> readBusinessByName(int catId, int userId) throws SQLException {
         List<BusinessDTO> c = new ArrayList<>();
 
         ResultSet rs = null;
         PreparedStatement ps = null;
         try {
+            int i = 1;
             ps = connection.prepareStatement(BUSINESS.ReadBusinessByName.Sql());
+            ps.setInt(i++, catId);
+            ps.setInt(i++, userId);
             rs = ps.executeQuery();
 
             while (rs.next()) {
@@ -151,13 +155,16 @@ public class BusinessDAO extends GenericDAO{
         return c;
     }
 
-    public List<BusinessDTO> readTrendingBusiness() throws SQLException {
+    public List<BusinessDTO> readMostRecentBusiness(int catId, int userId) throws SQLException {
         List<BusinessDTO> c = new ArrayList<>();
 
         ResultSet rs = null;
         PreparedStatement ps = null;
         try {
-            ps = connection.prepareStatement(BUSINESS.ReadTrendingBusiness.Sql());
+            int i = 1;
+            ps = connection.prepareStatement(BUSINESS.ReadMostRecentBusiness.Sql());
+            ps.setInt(i++, catId);
+            ps.setInt(i++, userId);
             rs = ps.executeQuery();
 
             while (rs.next()) {
