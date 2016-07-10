@@ -23,6 +23,7 @@ import android.widget.ToggleButton;
 
 import com.google.gson.Gson;
 import com.jerieshandal.tribies.R;
+import com.jerieshandal.tribies.image.ImageLoader;
 import com.jerieshandal.tribies.utility.ImageUtils;
 
 import org.w3c.dom.Text;
@@ -35,11 +36,12 @@ import java.util.List;
  * Created by Jeries Handal on 12/29/2015.
  * Version 1.0.0
  */
-public class BusinessAdapter extends ArrayAdapter<BusinessDTO> implements Filterable {
+public class BusinessAdapter extends ArrayAdapter<BusinessView> implements Filterable {
 
-    private List<BusinessDTO> business;
+    private List<BusinessView> business;
     private BusinessAdapter adapter;
     private int resource;
+
 
     public BusinessAdapter(Context context, int resource) {
         super(context, resource);
@@ -63,16 +65,19 @@ public class BusinessAdapter extends ArrayAdapter<BusinessDTO> implements Filter
         }
 
         //TODO: Bind DTO to the layout
-        BusinessDTO e = getItem(position);
+        BusinessView e = getItem(position);
 
-//        ImageView logo = (ImageView) parent.findViewById(R.id.businessLogo);
-//        logo.setImageBitmap(ImageUtils.base64ToBitmap(e.getLogo()));
+        ImageView logo = (ImageView) businessView.findViewById(R.id.business_logo);
+        ImageLoader imageLoader = new ImageLoader(businessView.getContext());
+        imageLoader.displayImage(e.getLogo(), logo);
 
         TextView name = (TextView) businessView.findViewById(R.id.business_name);
         name.setText(e.getName());
 
         ToggleButton toggleButton = (ToggleButton) businessView.findViewById(R.id.like_button);
-        toggleButton.setChecked(true);
+        toggleButton.setText(e.getBusId()+"");
+        toggleButton.setChecked(e.isFavorite());
+        toggleButton.setOnClickListener(toggleClickListener);
 
         return businessView;
     }
@@ -89,9 +94,9 @@ public class BusinessAdapter extends ArrayAdapter<BusinessDTO> implements Filter
                     results.values = business;
                     results.count = business.size();
                 } else {
-                    List<BusinessDTO> tempBusiness = new ArrayList<>();
+                    List<BusinessView> tempBusiness = new ArrayList<>();
 
-                    for (BusinessDTO e : business) {
+                    for (BusinessView e : business) {
                         //TODO: Implement filter logic here
                     }
 
@@ -107,14 +112,22 @@ public class BusinessAdapter extends ArrayAdapter<BusinessDTO> implements Filter
                 if (results.count == 0) {
                     notifyDataSetInvalidated();
                 } else {
-                    adapter.addAll((List<BusinessDTO>) results.values);
+                    adapter.addAll((List<BusinessView>) results.values);
                     notifyDataSetChanged();
                 }
             }
         };
     }
 
-    public void updateList(List<BusinessDTO> c){
+    private View.OnClickListener toggleClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            ToggleButton button = (ToggleButton) v;
+            System.out.println(button.isChecked());
+        }
+    };
+
+    public void updateList(List<BusinessView> c){
         adapter.clear();
         adapter.addAll(c);
         notifyDataSetChanged();

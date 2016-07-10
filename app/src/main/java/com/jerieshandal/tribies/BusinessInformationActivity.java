@@ -12,9 +12,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.jerieshandal.tribies.business.BusinessDTO;
+import com.jerieshandal.tribies.image.ImageLoader;
 import com.jerieshandal.tribies.utility.StringUtils;
 
 import org.w3c.dom.Text;
@@ -28,6 +30,7 @@ public class BusinessInformationActivity extends AppCompatActivity {
     private TextView mEmailView;
     private TextView mPhoneView;
     private TextView mAddressView;
+    private TextView mWebsiteView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +38,10 @@ public class BusinessInformationActivity extends AppCompatActivity {
         setContentView(R.layout.activity_business_information);
 
         selectedBusiness = (BusinessDTO) getIntent().getSerializableExtra(BUSINESS_ID_TAG);
+        ImageView logo = (ImageView) findViewById(R.id.business_logo);
+        ImageLoader imageLoader = new ImageLoader(getApplicationContext());
+        imageLoader.displayImage(selectedBusiness.getLogo(), logo);
+
         mBusinessToolbarTitle = (TextView) findViewById(R.id.business_toolbar_title);
         mBusinessToolbarTitle.setTypeface(StringUtils.retrieveTitleFont(getAssets()));
         mBusinessToolbarTitle.setText(getString(R.string.title_activity_business_information).concat(" ").concat(selectedBusiness.getName()));
@@ -50,6 +57,9 @@ public class BusinessInformationActivity extends AppCompatActivity {
 
         mAddressView = (TextView) findViewById(R.id.business_addresse_text);
         mAddressView.setText(selectedBusiness.getAddress());
+
+        mWebsiteView = (TextView) findViewById(R.id.business_website);
+        mWebsiteView.setText(selectedBusiness.getWebsite());
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.business_information_toolbar);
         setSupportActionBar(toolbar);

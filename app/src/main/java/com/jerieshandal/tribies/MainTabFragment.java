@@ -8,7 +8,9 @@
 
 package com.jerieshandal.tribies;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -21,6 +23,10 @@ import android.view.ViewGroup;
 
 import com.jerieshandal.tribies.business.BusinessListFragment;
 import com.jerieshandal.tribies.business.BusinessType;
+import com.jerieshandal.tribies.popup.LoginPopup;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * MainTabFragment
@@ -29,9 +35,13 @@ import com.jerieshandal.tribies.business.BusinessType;
  */
 public class MainTabFragment extends Fragment {
 
-    private static final String[] tabNames = {BusinessType.MY_STORES.getType(),
-            BusinessType.STORES.getType(),
-            BusinessType.MOST_RECENT.getType()};
+    public static final String MAIN_TAB_TAG = "main_tab_tag";
+
+    private int userId;
+
+    private static final BusinessType[] tabNames = {BusinessType.MY_STORES,
+            BusinessType.STORES,
+            BusinessType.MOST_RECENT};
 
     public static TabLayout tabLayout;
     public static ViewPager viewPager;
@@ -40,11 +50,10 @@ public class MainTabFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.main_tab_layout, null);
-
+        userId = PreferenceManager.getDefaultSharedPreferences(container.getContext()).getInt(LoginPopup.LOGGED_IN_ID, 0);
         tabLayout = (TabLayout) view.findViewById(R.id.main_tabs);
         viewPager = (ViewPager) view.findViewById(R.id.main_view_pager);
         viewPager.setAdapter(new TabAdapter(getChildFragmentManager()));
-
         tabLayout.post(new Runnable() {
             @Override
             public void run() {
@@ -54,29 +63,61 @@ public class MainTabFragment extends Fragment {
         return view;
     }
 
-    private class TabAdapter extends FragmentPagerAdapter{
+    public void updateListFragment(int catId) {
+        TabAdapter adapter = (TabAdapter) viewPager.getAdapter();
+        BusinessListFragment fragment = (BusinessListFragment) adapter.getFragment(tabLayout.getSelectedTabPosition());
+        fragment.updateList(tabNames[tabLayout.getSelectedTabPosition()], catId, userId);
+    }
 
-        public TabAdapter(FragmentManager fragmentManager){
-            super(fragmentManager);
+    private class TabAdapter extends FragmentPagerAdapter {
+
+        private Map<Integer, String> mFragmentTags;
+        private FragmentManager mFragmentManager;
+
+        public TabAdapter(FragmentManager mFragmentManager) {
+            super(mFragmentManager);
+            this.mFragmentManager = mFragmentManager;
+            mFragmentTags = new HashMap<>();
+        }
+
+        @Override
+        public Object instantiateItem(ViewGroup container, int position) {
+            Object obj = super.instantiateItem(container, position);
+
+            if (obj instanceof Fragment) {
+                // record the fragment tag here.
+                Fragment f = (Fragment) obj;
+                String tag = f.getTag();
+                mFragmentTags.put(position, tag);
+            }
+
+            return obj;
         }
 
         @Override
         public Fragment getItem(int position) {
             BusinessListFragment fragment = new BusinessListFragment();
 
-            switch(position){
+            switch (position) {
                 case 0:
-                    fragment.updateList(BusinessType.MY_STORES);
+                    fragment.updateList(BusinessType.MY_STORES, 8, userId);
                     break;
                 case 1:
-                    fragment.updateList(BusinessType.STORES);
+                    fragment.updateList(BusinessType.STORES, 8, userId);
                     break;
                 case 2:
-                    fragment.updateList(BusinessType.MOST_RECENT);
+                    fragment.updateList(BusinessType.MOST_RECENT, 8, userId);
                     break;
             }
 
             return fragment;
+        }
+
+        public Fragment getFragment(int position) {
+            String tag = mFragmentTags.get(position);
+            if (tag == null)
+                return null;
+            return mFragmentManager.findFragmentByTag(tag);
         }
 
         @Override
@@ -86,7 +127,7 @@ public class MainTabFragment extends Fragment {
 
         @Override
         public CharSequence getPageTitle(int position) {
-            return tabNames[position];
+            return tabNames[position].getType();
         }
     }
 }

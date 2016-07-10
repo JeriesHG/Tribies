@@ -7,27 +7,41 @@
  */
 package com.jerieshandal.tribies;
 
+import android.Manifest;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.text.TextUtils;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.PendingResult;
+import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.location.places.PlaceLikelihood;
+import com.google.android.gms.location.places.PlaceLikelihoodBuffer;
+import com.google.android.gms.location.places.Places;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
+import com.jerieshandal.tribies.business.SearchBusiness;
 import com.jerieshandal.tribies.category.CategoryDAO;
 import com.jerieshandal.tribies.category.CategoryDTO;
 import com.jerieshandal.tribies.database.DriverFactory;
@@ -36,16 +50,7 @@ import com.jerieshandal.tribies.popup.LoginPopup;
 import com.jerieshandal.tribies.utility.Callbacks;
 import com.jerieshandal.tribies.utility.StringUtils;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.lang.reflect.Type;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -56,42 +61,41 @@ import java.util.List;
  * Created by Jeries Handal on 12/29/2015.
  * Version 1.0.0
  */
-public class MainActivity extends AppCompatActivity implements Callbacks {
+public class MainActivity extends AppCompatActivity implements Callbacks, GoogleApiClient.OnConnectionFailedListener {
 
-    private static final Logger LOGGER =
-            LoggerFactory.getLogger(MainActivity.class);
+    public static String CATEGORY_ID = "category_id";
     private NavigationView mNavigationView;
     private FragmentManager mFragmentManager;
-    private FragmentTransaction mFragmentTransaction;
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mDrawerToggle;
-    private TextView mTitle;
-    private NavigationView.OnNavigationItemSelectedListener navigationItemSelectedListener = new NavigationView.OnNavigationItemSelectedListener() {
-        @Override
-        public boolean onNavigationItemSelected(MenuItem item) {
-            //TODO: add selected category logic
-            mDrawerLayout.closeDrawers();
-            return false;
-        }
-    };
+    private GoogleApiClient mGoogleApiClient;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        int id = PreferenceManager.getDefaultSharedPreferences(this).getInt(LoginPopup.LOGGED_IN_ID, 0);
-        if (id == 0) {
+        int userId = PreferenceManager.getDefaultSharedPreferences(this).getInt(LoginPopup.LOGGED_IN_ID, 0);
+        if (userId == 0) {
             startActivity(new Intent(MainActivity.this, LoginActivity.class));
         }
         setContentView(R.layout.activity_main);
         new LoadCategories(PreferenceManager.getDefaultSharedPreferences(this)).execute();
 
+        mGoogleApiClient = new GoogleApiClient
+                .Builder(this)
+                .addApi(Places.GEO_DATA_API)
+                .addApi(Places.PLACE_DETECTION_API)
+                .enableAutoManage(this, this)
+                .build();
+
+
         mDrawerLayout = (DrawerLayout) findViewById(R.id.main_drawer_layout);
         mNavigationView = (NavigationView) findViewById(R.id.main_navigation_view);
 
         mFragmentManager = getSupportFragmentManager();
-        mFragmentTransaction = mFragmentManager.beginTransaction();
-        mFragmentTransaction.replace(R.id.main_container_view, new MainTabFragment()).commit();
+        FragmentTransaction mFragmentTransaction = mFragmentManager.beginTransaction();
+        mFragmentTransaction.replace(R.id.main_container_view, new MainTabFragment(), MainTabFragment.MAIN_TAB_TAG).commit();
 
         mNavigationView.setNavigationItemSelectedListener(navigationItemSelectedListener);
 
@@ -103,8 +107,11 @@ public class MainActivity extends AppCompatActivity implements Callbacks {
             getSupportActionBar().setDisplayShowTitleEnabled(false);
         }
 
-        mTitle = (TextView) findViewById(R.id.main_toolbar_title);
+        TextView mTitle = (TextView) findViewById(R.id.main_toolbar_title);
         mTitle.setTypeface(StringUtils.retrieveTitleFont(getAssets()));
+
+        Button button = (Button) findViewById(R.id.locate_stores);
+        button.setOnClickListener(locateStoresListener);
 
         mDrawerLayout.setDrawerListener(mDrawerToggle);
         mDrawerToggle.syncState();
@@ -146,6 +153,67 @@ public class MainActivity extends AppCompatActivity implements Callbacks {
         return true;
     }
 
+    @Override
+    public void onConnectionFailed(ConnectionResult connectionResult) {
+
+    }
+
+    private NavigationView.OnNavigationItemSelectedListener navigationItemSelectedListener = new NavigationView.OnNavigationItemSelectedListener() {
+        @Override
+        public boolean onNavigationItemSelected(MenuItem item) {
+            for (int i = 0; i < mNavigationView.getMenu().size(); i++) {
+                mNavigationView.getMenu().getItem(i).setChecked(false);
+            }
+            item.setChecked(true);
+            mDrawerLayout.closeDrawers();
+            MainTabFragment tabFragment = (MainTabFragment) mFragmentManager.findFragmentByTag(MainTabFragment.MAIN_TAB_TAG);
+            tabFragment.updateListFragment(item.getItemId());
+            return false;
+        }
+    };
+
+    private View.OnClickListener locateStoresListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            if (ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION)
+                    == PackageManager.PERMISSION_GRANTED) {
+
+                PendingResult<PlaceLikelihoodBuffer> result = Places.PlaceDetectionApi
+                        .getCurrentPlace(mGoogleApiClient, null);
+                result.setResultCallback(new ResultCallback<PlaceLikelihoodBuffer>() {
+                    @Override
+                    public void onResult(PlaceLikelihoodBuffer likelyPlaces) {
+                        Toast.makeText(MainActivity.this, "Escaneando, por favor espere", Toast.LENGTH_LONG).show();
+                        List<String> placesId = new ArrayList<>();
+                        List<String> busNames = new ArrayList<>();
+                        for (PlaceLikelihood placeLikelihood : likelyPlaces) {
+                            placesId.add(placeLikelihood.getPlace().getId());
+                            busNames.add(placeLikelihood.getPlace().getName().toString());
+                        }
+                        likelyPlaces.release();
+                        new SearchBusiness(getApplicationContext(), placesId,busNames).execute();
+                    }
+                });
+            }
+        }
+    };
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if(mGoogleApiClient != null){
+            mGoogleApiClient.connect();
+        }
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if(mGoogleApiClient != null){
+            mGoogleApiClient.disconnect();
+        }
+    }
+
     private class LoadCategories extends AsyncTask<List<CategoryDTO>, Void, List<CategoryDTO>> {
 
         private final Type listType = new TypeToken<
@@ -183,7 +251,11 @@ public class MainActivity extends AppCompatActivity implements Callbacks {
             if (c != null) {
                 Menu menu = mNavigationView.getMenu();
                 for (int i = 0; i < c.size(); i++) {
-                    menu.add(i, c.get(i).getCatId(), Menu.NONE, c.get(i).getName());
+                    CategoryDTO e = c.get(i);
+                    menu.add(i, e.getCatId(), Menu.NONE, e.getName());
+                    if (i == 0) {
+                        menu.getItem(i).setChecked(true);
+                    }
                 }
             }
         }

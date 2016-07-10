@@ -40,7 +40,7 @@
            app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
            <ImageView
-               android:id="@+id/business_profile_picture"
+               android:id="@+id/business_logo"
                android:layout_width="148dp"
                android:layout_height="148dp"
                android:layout_gravity="center_horizontal"
@@ -166,6 +166,38 @@
 
            <TextView
                android:id="@+id/business_addresse_text"
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:text="@string/field_not_entered"
+               android:textAppearance="?android:attr/textAppearanceMedium"
+               android:textSize="16sp" />
+
+           <LinearLayout
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content"
+               android:orientation="horizontal"
+               android:layout_marginTop="10dp">
+
+               <TextView
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:text="Website"
+                   android:textAppearance="?android:attr/textAppearanceMedium"
+                   android:textSize="18sp"
+                   android:textStyle="bold"
+                   android:layout_marginRight="10dp"
+                   android:layout_marginEnd="10dp"
+                   android:layout_marginTop="-3dp" />
+
+               <ImageView
+                   android:layout_width="20dp"
+                   android:layout_height="20dp"
+                   android:layout_gravity="center_horizontal"
+                   android:background="@drawable/ic_cloud_black_36dp" />
+           </LinearLayout>
+
+           <TextView
+               android:id="@+id/business_website"
                android:layout_width="wrap_content"
                android:layout_height="wrap_content"
                android:text="@string/field_not_entered"

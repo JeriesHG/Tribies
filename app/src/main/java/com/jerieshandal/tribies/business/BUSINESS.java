@@ -25,7 +25,7 @@ public enum BUSINESS {
     /**
      * Reads All Business By Name
      */
-    ReadBusinessByName("SELECT  B.BusId,B.Name, B.Email, B.Phone, B.Address, B.Logo, B.Created " +
+    ReadBusinessByName("SELECT  B.BusId,B.Name, B.Email, B.Phone, B.Address, B.Logo, B.Website, B.Created " +
             "FROM Business as B " +
             "INNER JOIN BusinessByCategory as BC " +
             "ON BC.CatId = ? AND B.BusId = BC.BusId " +
@@ -34,7 +34,7 @@ public enum BUSINESS {
     /**
      * Reads all business liked by user
      */
-    ReadFavoriteBusiness("SELECT  B.BusId,B.Name, B.Email, B.Phone, B.Address, B.Logo, B.Created " +
+    ReadFavoriteBusiness("SELECT  B.BusId,B.Name, B.Email, B.Phone, B.Address, B.Logo, B.Website, B.Created " +
             "FROM Business as B " +
             "INNER JOIN BusinessByCategory as BC " +
             "ON BC.CatId = ? AND B.BusId = BC.BusId " +
@@ -43,12 +43,16 @@ public enum BUSINESS {
     /**
      * Read most recent business
      */
-    ReadMostRecentBusiness("SELECT  B.BusId,B.Name, B.Email, B.Phone, B.Address, B.Logo, B.Created " +
+    ReadMostRecentBusiness("SELECT  B.BusId,B.Name, B.Email, B.Phone, B.Address, B.Logo, B.Website B.Created " +
             "FROM Business as B " +
             "INNER JOIN BusinessByCategory as BC " +
             "ON BC.CatId = ? AND B.BusId = BC.BusId " +
             "WHERE  NOT EXISTS (SELECT 1  FROM   FavoriteBusiness as FB  WHERE  B.BusId = FB.BusId AND FB.UserId = ?) " +
-            "ORDER BY B.Created;");
+            "ORDER BY B.Created;"),
+    /**
+     * Execute Places Call Procedure, returning one or more business if existant
+     */
+    ExecutePlaces("CALL executePlaces(?,?)");
 
     private final String sql;
 

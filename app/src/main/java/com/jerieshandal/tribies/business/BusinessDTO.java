@@ -24,6 +24,7 @@ public class BusinessDTO implements Serializable {
     private String email;
     private String address;
     private String logo;
+    private String website;
     private Date created;
 
 
@@ -75,6 +76,14 @@ public class BusinessDTO implements Serializable {
         this.logo = logo;
     }
 
+    public String getWebsite() {
+        return website;
+    }
+
+    public void setWebsite(String website) {
+        this.website = website;
+    }
+
     public Date getCreated() {
         return created;
     }
@@ -82,4 +91,5 @@ public class BusinessDTO implements Serializable {
     public void setCreated(Date created) {
         this.created = created;
     }
+
 }

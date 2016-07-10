@@ -9,6 +9,7 @@ package com.jerieshandal.tribies.business;
 
 import com.jerieshandal.tribies.utility.GenericDAO;
 
+import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -21,7 +22,7 @@ import java.util.List;
  * Created by Jeries Handal on 12/29/2015.
  * Version 1.0.0
  */
-public class BusinessDAO extends GenericDAO{
+public class BusinessDAO extends GenericDAO {
 
     public BusinessDAO(Connection connection) {
         super(connection);
@@ -45,10 +46,10 @@ public class BusinessDAO extends GenericDAO{
             if (rs != null) {
                 rs.close();
             }
-            if(ps != null){
+            if (ps != null) {
                 ps.close();
             }
-            if(connection != null){
+            if (connection != null) {
                 connection.close();
             }
         }
@@ -57,7 +58,7 @@ public class BusinessDAO extends GenericDAO{
     }
 
     public boolean insertFavoriteBusiness(int busId, int userId) throws SQLException {
-       boolean success = false;
+        boolean success = false;
 
         ResultSet rs = null;
         PreparedStatement ps = null;
@@ -74,10 +75,10 @@ public class BusinessDAO extends GenericDAO{
             if (rs != null) {
                 rs.close();
             }
-            if(ps != null){
+            if (ps != null) {
                 ps.close();
             }
-            if(connection != null){
+            if (connection != null) {
                 connection.close();
             }
         }
@@ -85,8 +86,8 @@ public class BusinessDAO extends GenericDAO{
         return success;
     }
 
-    public List<BusinessDTO> readFavoriteBusiness(int catId, int userId) throws SQLException {
-        List<BusinessDTO> c = new ArrayList<>();
+    public List<BusinessView> readFavoriteBusiness(int catId, int userId) throws SQLException {
+        List<BusinessView> c = new ArrayList<>();
 
         ResultSet rs = null;
         PreparedStatement ps = null;
@@ -98,8 +99,9 @@ public class BusinessDAO extends GenericDAO{
             rs = ps.executeQuery();
 
             while (rs.next()) {
-                BusinessDTO e;
-                c.add(e = new BusinessDTO());
+                BusinessView e;
+                c.add(e = new BusinessView());
+                e.setFavorite(true);
                 hydrateBusiness(rs, e);
 
             }
@@ -109,10 +111,10 @@ public class BusinessDAO extends GenericDAO{
             if (rs != null) {
                 rs.close();
             }
-            if(ps != null){
+            if (ps != null) {
                 ps.close();
             }
-            if(connection != null){
+            if (connection != null) {
                 connection.close();
             }
         }
@@ -120,8 +122,8 @@ public class BusinessDAO extends GenericDAO{
         return c;
     }
 
-    public List<BusinessDTO> readBusinessByName(int catId, int userId) throws SQLException {
-        List<BusinessDTO> c = new ArrayList<>();
+    public List<BusinessView> readBusinessByName(int catId, int userId) throws SQLException {
+        List<BusinessView> c = new ArrayList<>();
 
         ResultSet rs = null;
         PreparedStatement ps = null;
@@ -133,8 +135,8 @@ public class BusinessDAO extends GenericDAO{
             rs = ps.executeQuery();
 
             while (rs.next()) {
-                BusinessDTO e;
-                c.add(e = new BusinessDTO());
+                BusinessView e;
+                c.add(e = new BusinessView());
                 hydrateBusiness(rs, e);
 
             }
@@ -144,10 +146,10 @@ public class BusinessDAO extends GenericDAO{
             if (rs != null) {
                 rs.close();
             }
-            if(ps != null){
+            if (ps != null) {
                 ps.close();
             }
-            if(connection != null){
+            if (connection != null) {
                 connection.close();
             }
         }
@@ -155,8 +157,8 @@ public class BusinessDAO extends GenericDAO{
         return c;
     }
 
-    public List<BusinessDTO> readMostRecentBusiness(int catId, int userId) throws SQLException {
-        List<BusinessDTO> c = new ArrayList<>();
+    public List<BusinessView> readMostRecentBusiness(int catId, int userId) throws SQLException {
+        List<BusinessView> c = new ArrayList<>();
 
         ResultSet rs = null;
         PreparedStatement ps = null;
@@ -168,8 +170,8 @@ public class BusinessDAO extends GenericDAO{
             rs = ps.executeQuery();
 
             while (rs.next()) {
-                BusinessDTO e;
-                c.add(e = new BusinessDTO());
+                BusinessView e;
+                c.add(e = new BusinessView());
                 hydrateBusiness(rs, e);
 
             }
@@ -179,10 +181,10 @@ public class BusinessDAO extends GenericDAO{
             if (rs != null) {
                 rs.close();
             }
-            if(ps != null){
+            if (ps != null) {
                 ps.close();
             }
-            if(connection != null){
+            if (connection != null) {
                 connection.close();
             }
         }
@@ -190,13 +192,52 @@ public class BusinessDAO extends GenericDAO{
         return c;
     }
 
-    private void hydrateBusiness(ResultSet rs, BusinessDTO e) throws SQLException {
+    public List<BusinessView> executePlaces(String placesId, String businessName) throws SQLException {
+        List<BusinessView> c = new ArrayList<>();
+
+        ResultSet rs = null;
+        CallableStatement cs = null;
+        try {
+            int i = 1;
+            cs = connection.prepareCall(BUSINESS.ExecutePlaces.Sql());
+            cs.setString(i++, placesId);
+            cs.setString(i++, businessName);
+
+            System.out.println("Searching for: " + placesId + " with Name: " + businessName);
+
+            if (cs.execute()) {
+                rs = cs.getResultSet();
+                if (rs != null) {
+                    while (rs.next()) {
+                        BusinessView e;
+                        c.add(e = new BusinessView());
+                        hydrateBusiness(rs, e);
+
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (cs != null) {
+                cs.close();
+            }
+        }
+
+        return c;
+    }
+
+    private void hydrateBusiness(ResultSet rs, BusinessView e) throws SQLException {
         e.setBusId(rs.getInt("BusId"));
         e.setName(rs.getString("Name"));
         e.setEmail(rs.getString("Email"));
         e.setPhone(rs.getString("Phone"));
         e.setAddress(rs.getString("Address"));
         e.setLogo(rs.getString("Logo"));
+        e.setWebsite(rs.getString("Website"));
         e.setCreated(toJavaDate(rs.getDate("Created")));
     }
 }

@@ -3,6 +3,7 @@
     <string name="title_activity_login">Tribies</string>
     <string name="slogan">Bueno, bonito, barato...</string>
     <string name="facebook_app_id">2jmj7l5rSw0yVb/vlWAYkK/YBwk=s</string>
+    <string name="google_app_id">AIzaSyDGy7mlZLt33Y2C7QOTIFObWuZM2Os8ysY</string>
 
     <!-- Strings related to login -->
     <string name="prompt_full_name">Nombre Completo</string>

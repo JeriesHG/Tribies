@@ -132,21 +132,26 @@ public class BusinessListFragment extends ListFragment {
         }
     }
 
-    public void updateList(BusinessType type) {
-        new LoadBusiness(type).execute();
+    public void updateList(BusinessType type, int catId, int userId) {
+        System.out.println(type + " - " + catId + " " + userId);
+        new LoadBusiness(type, catId, userId).execute();
     }
 
-    private class LoadBusiness extends AsyncTask<List<BusinessDTO>, Void, List<BusinessDTO>> {
+    private class LoadBusiness extends AsyncTask<List<BusinessView>, Void, List<BusinessView>> {
 
         private BusinessType businessType;
+        private int catId;
+        private int userId;
 
-        private LoadBusiness(BusinessType businessType) {
+        private LoadBusiness(BusinessType businessType, int catId, int userId) {
             this.businessType = businessType;
+            this.catId = catId;
+            this.userId = userId;
         }
 
         @Override
-        protected List<BusinessDTO> doInBackground(List... params) {
-            List<BusinessDTO> c = new ArrayList<>();
+        protected List<BusinessView> doInBackground(List... params) {
+            List<BusinessView> c = new ArrayList<>();
 
             Connection connection = null;
             try {
@@ -154,12 +159,13 @@ public class BusinessListFragment extends ListFragment {
                 BusinessDAO dao = new BusinessDAO(connection);
                 switch (businessType) {
                     case MY_STORES:
+                        c = dao.readFavoriteBusiness(catId, userId);
                         break;
                     case STORES:
-//                        c = dao.readBusinessByName();
+                        c = dao.readBusinessByName(catId, userId);
                         break;
                     case MOST_RECENT:
-//                        c = dao.readMostRecentBusiness();
+                        c = dao.readMostRecentBusiness(catId, userId);
                         break;
                 }
             } catch (SQLException | ClassNotFoundException ex) {
@@ -169,9 +175,10 @@ public class BusinessListFragment extends ListFragment {
         }
 
         @Override
-        protected void onPostExecute(List<BusinessDTO> c) {
+        protected void onPostExecute(List<BusinessView> c) {
             if (c != null) {
                 businessAdapter.updateList(c);
+                businessAdapter.notifyDataSetChanged();
             }
         }
     }

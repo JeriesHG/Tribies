@@ -18,11 +18,11 @@ public enum CATEGORY {
     /**
      * Reads all categories order by name
      */
-    ReadCategories("SELECT * FROM Category ORDER BY Name");
+    ReadCategories("SELECT * FROM Category ORDER BY Z_Index, Name;");
 
     private final String sql;
 
-    private CATEGORY(String sql){
+    CATEGORY(String sql){
         this.sql = sql;
     }
 
