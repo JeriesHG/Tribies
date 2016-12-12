@@ -13,8 +13,8 @@
     <string name="password">Contraseña</string>
     <string name="confirm_password">Confirmar Contraseña</string>
     <string name="registrate">Registrate</string>
-    <string name="prompt_login_credential">Correo electronico o telefono</string>
-    <string name="error_login_credential">Este correo electronico o telefono no es valido</string>
+    <string name="prompt_login_credential">Correo electronico</string>
+    <string name="error_login_credential">Este correo electronico no es valido</string>
     <string name="action_login_short">Login</string>
     <string name="error_invalid_email">Este correo electronico no es valido</string>
     <string name="error_invalid_password">La constraseña es muy corta</string>
@@ -36,4 +36,6 @@ Fusce varius ultrices nibh ac lacinia. Integer posuere ligula sit amet orci comm
 
 Phasellus porta ac orci imperdiet ultrices. Suspendisse feugiat accumsan tristique. Proin non diam lobortis, pretium lacus id, imperdiet erat. Nulla consectetur sem eget risus porta bibendum. Etiam nec rutrum est. Integer nulla lacus, sagittis vitae nibh vel, condimentum finibus arcu. Sed nisl ligula, rhoncus quis purus quis, porttitor commodo arcu. Ut euismod, nulla sollicitudin facilisis pretium, ligula elit efficitur sapien, ac dignissim lectus ipsum vitae metus. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Phasellus non ultricies nisl.
     </string>
+    <string name="register_text">Registrese</string>
+    <string name="login_text">Login</string>
 </resources>

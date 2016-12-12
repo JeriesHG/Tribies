@@ -119,7 +119,9 @@
                 android:text="@string/registrate"
                 android:textColor="#FFFFFF"
                 android:textSize="15sp"
-                android:layout_gravity="center_horizontal" />
+                android:layout_gravity="center_horizontal"
+                android:layout_marginLeft="5sp"
+                android:layout_marginRight="5sp" />
         </LinearLayout>
     </ScrollView>
 </RelativeLayout>

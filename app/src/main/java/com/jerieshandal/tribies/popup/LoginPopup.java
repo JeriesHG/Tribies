@@ -111,12 +111,11 @@ public class LoginPopup extends Activity implements LoaderManager.LoaderCallback
                 mLoginCredentials.setError(getString(R.string.error_login_credential));
                 cancel = true;
             }
-        } else if (!loginCredentials.matches("\\d+")) {//phone
+        } else {
             focusView = mLoginCredentials;
             mLoginCredentials.setError(getString(R.string.error_login_credential));
             cancel = true;
         }
-
 
         if (cancel) {
             // There was an error; don't attempt login and focus the first
