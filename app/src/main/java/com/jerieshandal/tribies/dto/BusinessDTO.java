@@ -5,7 +5,7 @@
  *  Written by Jeries Handal <Jeries Handal> - December, 2015.
  *
  */
-package com.jerieshandal.tribies.business;
+package com.jerieshandal.tribies.dto;
 
 import java.io.Serializable;
 import java.util.Date;

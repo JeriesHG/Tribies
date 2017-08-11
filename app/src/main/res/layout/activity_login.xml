@@ -48,7 +48,7 @@
             android:background="@drawable/common_button_shape"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
-            android:backgroundTint="#2ae56c"
+            android:backgroundTint="#2ad164"
             android:maxWidth="250dp"
             android:minWidth="150dp" />
 

@@ -19,9 +19,9 @@ import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
-import com.jerieshandal.tribies.business.BusinessDTO;
+import com.jerieshandal.tribies.dto.BusinessDTO;
 import com.jerieshandal.tribies.discount.DiscountAdapter;
-import com.jerieshandal.tribies.discount.DiscountDTO;
+import com.jerieshandal.tribies.dto.DiscountDTO;
 import com.jerieshandal.tribies.utility.StringUtils;
 
 import java.util.ArrayList;

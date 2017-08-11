@@ -15,6 +15,7 @@ import android.support.v4.app.NotificationCompat;
 import android.widget.Toast;
 
 import com.jerieshandal.tribies.R;
+import com.jerieshandal.tribies.dao.BusinessDAO;
 import com.jerieshandal.tribies.database.DriverFactory;
 
 import java.sql.Connection;

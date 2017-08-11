@@ -17,7 +17,9 @@ import android.widget.ListView;
 
 import com.jerieshandal.tribies.BusinessDiscountsActivity;
 import com.jerieshandal.tribies.R;
+import com.jerieshandal.tribies.dao.BusinessDAO;
 import com.jerieshandal.tribies.database.DriverFactory;
+import com.jerieshandal.tribies.dto.BusinessDTO;
 import com.jerieshandal.tribies.utility.Callbacks;
 
 import java.sql.Connection;

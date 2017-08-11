@@ -6,13 +6,14 @@
  *
  */
 
-package com.jerieshandal.tribies.user;
+package com.jerieshandal.tribies.dao;
 
 import android.text.TextUtils;
 
 import com.jerieshandal.tribies.security.TokenGenerator;
+import com.jerieshandal.tribies.user.USER;
+import com.jerieshandal.tribies.dto.UserDTO;
 import com.jerieshandal.tribies.utility.DateUtils;
-import com.jerieshandal.tribies.utility.GenericDAO;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

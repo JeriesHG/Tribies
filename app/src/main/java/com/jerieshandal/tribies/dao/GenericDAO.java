@@ -5,7 +5,7 @@
  *  Written by Jeries Handal <Jeries Handal> - December, 2015.
  *
  */
-package com.jerieshandal.tribies.utility;
+package com.jerieshandal.tribies.dao;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,7 +24,6 @@ public class GenericDAO {
     protected Connection connection;
     private final static Logger LOGGER = LoggerFactory.getLogger(GenericDAO.class);
 
-    public GenericDAO(){}
     public GenericDAO(Connection connection){
         this.connection = connection;
     }

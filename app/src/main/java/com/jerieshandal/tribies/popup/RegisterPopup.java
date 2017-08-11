@@ -28,12 +28,11 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 
-import com.google.gson.Gson;
 import com.jerieshandal.tribies.MainActivity;
 import com.jerieshandal.tribies.R;
 import com.jerieshandal.tribies.database.DriverFactory;
-import com.jerieshandal.tribies.user.UserDAO;
-import com.jerieshandal.tribies.user.UserDTO;
+import com.jerieshandal.tribies.dao.UserDAO;
+import com.jerieshandal.tribies.dto.UserDTO;
 import com.jerieshandal.tribies.utility.StringUtils;
 
 import java.sql.Connection;

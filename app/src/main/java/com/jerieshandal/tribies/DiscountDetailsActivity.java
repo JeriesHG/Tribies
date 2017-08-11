@@ -16,7 +16,7 @@ import android.widget.TextView;
 
 import com.daimajia.slider.library.SliderLayout;
 import com.daimajia.slider.library.SliderTypes.DefaultSliderView;
-import com.jerieshandal.tribies.discount.DiscountDTO;
+import com.jerieshandal.tribies.dto.DiscountDTO;
 import com.jerieshandal.tribies.utility.StringUtils;
 
 public class DiscountDetailsActivity extends AppCompatActivity {

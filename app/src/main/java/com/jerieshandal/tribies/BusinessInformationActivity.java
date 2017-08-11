@@ -15,11 +15,9 @@ import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.jerieshandal.tribies.business.BusinessDTO;
+import com.jerieshandal.tribies.dto.BusinessDTO;
 import com.jerieshandal.tribies.image.ImageLoader;
 import com.jerieshandal.tribies.utility.StringUtils;
-
-import org.w3c.dom.Text;
 
 public class BusinessInformationActivity extends AppCompatActivity {
 

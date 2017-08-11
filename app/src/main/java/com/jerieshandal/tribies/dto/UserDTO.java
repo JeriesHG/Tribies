@@ -6,7 +6,7 @@
  *
  */
 
-package com.jerieshandal.tribies.user;
+package com.jerieshandal.tribies.dto;
 
 import java.io.Serializable;
 import java.util.Date;

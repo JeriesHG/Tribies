@@ -6,10 +6,11 @@
  *
  */
 
-package com.jerieshandal.tribies.category;
+package com.jerieshandal.tribies.dao;
 
 
-import com.jerieshandal.tribies.utility.GenericDAO;
+import com.jerieshandal.tribies.category.CATEGORY;
+import com.jerieshandal.tribies.dto.CategoryDTO;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

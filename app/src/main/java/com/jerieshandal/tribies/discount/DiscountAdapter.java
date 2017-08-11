@@ -8,7 +8,6 @@
 
 package com.jerieshandal.tribies.discount;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -16,13 +15,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.jerieshandal.tribies.BusinessDiscountsActivity;
-import com.jerieshandal.tribies.BusinessInformationActivity;
 import com.jerieshandal.tribies.DiscountDetailsActivity;
 import com.jerieshandal.tribies.R;
-import com.jerieshandal.tribies.utility.DateUtils;
+import com.jerieshandal.tribies.dto.DiscountDTO;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;

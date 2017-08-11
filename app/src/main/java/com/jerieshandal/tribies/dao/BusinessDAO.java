@@ -5,9 +5,10 @@
  *  Written by Jeries Handal <Jeries Handal> - December, 2015.
  *
  */
-package com.jerieshandal.tribies.business;
+package com.jerieshandal.tribies.dao;
 
-import com.jerieshandal.tribies.utility.GenericDAO;
+import com.jerieshandal.tribies.business.BUSINESS;
+import com.jerieshandal.tribies.business.BusinessView;
 
 import java.sql.CallableStatement;
 import java.sql.Connection;

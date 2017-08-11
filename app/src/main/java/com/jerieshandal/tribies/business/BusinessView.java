@@ -8,12 +8,14 @@
 
 package com.jerieshandal.tribies.business;
 
+import com.jerieshandal.tribies.dto.BusinessDTO;
+
 /**
  * BusinessView
  * Created by Jeries Handal on 3/12/2016.
  * Version 1.0.0
  */
-public class BusinessView extends BusinessDTO{
+public class BusinessView extends BusinessDTO {
 
     private boolean favorite;
 
